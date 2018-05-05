@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load i18n mezzanine_tags blog_tags keyword_tags staticfiles %}
+
+{% block meta_title %}{% if page %}{{ page.meta_title }}{% else %}{% trans "Blog" %}{% endif %}{% endblock %}
+
+{% block meta_keywords %}{% metablock %}
+{% keywords_for page as keywords %}
+{% for keyword in keywords %}
+    {% if not forloop.first %}, {% endif %}
+    {{ keyword }}
+{% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ page.description }}
+{% endmetablock %}{% endblock %}
+
+{% block title %}
+{% editable page.title %}{{ page.title }}{% endeditable %}
+{% endblock %}
+
+{% block breadcrumb_menu %}
+{{ block.super }}
+{% if tag or category or year or month or author %}
+<li>{% spaceless %}
+{% if tag %}
+    {% trans "Tag:" %} {{ tag }}
+{% else %}{% if category %}
+    {% trans "Category:" %} {{ category }}
+{% else %}{% if year or month %}
+    {% if month %}{{ month }}, {% endif %}{{ year }}
+{% else %}{% if author %}
+    {% trans "Author:" %} {{ author.get_full_name|default:author.username }}
+{% endif %}{% endif %}{% endif %}{% endif %}
+{% endspaceless %}
+</li>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {{ block.super }}
+        <!-- *** LEFT COLUMN ***
+     _________________________________________________________ -->
+        <div class="col-sm-9" id="blog-listing">
+            {% for blog_post in blog_posts.object_list %}
+                <div class="post">
+                    {% editable blog_post.title blog_post.content %}    
+                        <h2><a href="{{ blog_post.get_absolute_url }}">{{ blog_post.title }}</a></h2>
+                    {% endeditable %}
+                    {% with blog_post.user as author %}
+                        <p class="author-category">By <a href="{% url 'blog_post_list_author' author %}">{{ author.get_full_name|default:author.username }}</a> 
+                        {% with blog_post.categories.all as categories %}
+                            {% if categories %}
+                            {% trans "in" %}
+                            {% for category in categories %}
+                            <a href="{% url "blog_post_list_category" category.slug %}">{{ category }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        </p>
+                    {% endwith %}
+                    <hr>
+                    <p class="date-comments">
+                        <a href="{{ blog_post.get_absolute_url }}"><i class="fa fa-calendar-o"></i>
+                            {% blocktrans with sometime=blog_post.publish_date|timesince %}{{ sometime }} ago{% endblocktrans %}
+                        </a>
+                        <a href="{{ blog_post.get_absolute_url }}"><i class="fa fa-comment-o"></i> 8 Comments</a>
+                    </p>
+                    {% if settings.BLOG_USE_FEATURED_IMAGE and blog_post.featured_image %}
+                        <div class="image">
+                            <a href="{{ blog_post.get_absolute_url }}">
+                                <img src="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 800 450 %}" class="img-responsive" alt="blog_post.featured_image.filename_root">
+                            </a>
+                        </div>
+                    {% endif %}
+                    
+                    {{ blog_post.description_from_content|truncatechars_html:250|safe }}
+                    <p class="read-more"><a href="{{ blog_post.get_absolute_url }}" class="btn btn-primary">{% trans "Continue reading" %}</a>
+                    </p>
+                </div>
+            {% endfor %}
+
+            {% pagination_for blog_posts %}
+        </div>
+        <!-- /.col-md-9 -->
+        <!-- *** LEFT COLUMN END *** -->
+
+        <div class="col-md-3">
+            <!-- *** BLOG MENU ***
+_________________________________________________________ -->
+            <div class="panel panel-default sidebar-menu">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{% trans "Blog" %}</h3>
+                </div>
+                <div class="panel-body">
+                    {% include "blog/includes/filter_panel.html" %}
+                </div>
+            </div>
+            <!-- /.col-md-3 -->
+            <!-- *** BLOG MENU END *** -->
+        </div>
+    </div>
+    <!-- /.container -->
+{% endblock %}

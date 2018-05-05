@@ -1,0 +1,255 @@
+{% load static pages_tags mezzanine_tags custom_tags i18n %}
+{% load_siteconfig as config %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{% block meta_description %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+
+    <title>
+        {% block meta_title %}{% endblock %}{% if settings.SITE_TITLE %} | {{ settings.SITE_TITLE }}{% endif %}
+    </title>
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100' rel='stylesheet' type='text/css'>
+
+    <!-- styles -->
+    <link href="{% static 'css/vendor/font-awesome.css' %}" rel="stylesheet">
+    <link href="{% static 'css/vendor/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/vendor/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/vendor/owl.carousel.css' %}" rel="stylesheet">
+    <link href="{% static 'css/vendor/owl.theme.css' %}" rel="stylesheet">
+
+    <!-- theme stylesheet -->
+    <link href="{% static 'css/style.default.css' %}" rel="stylesheet" id="theme-stylesheet">
+
+    <!-- your stylesheet with modifications -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+
+    <script src="{% static 'js/respond.min.js' %}"></script>
+
+    <link rel="shortcut icon" href="{{ config.favicon.url }}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body id="body">
+    <!-- *** TOPBAR ***
+ _________________________________________________________ -->
+    <div id="top">
+        <div class="container">
+            <div class="col-md-6 offer" data-animate="fadeInDown">
+                <a href="#" class="btn btn-success btn-sm" data-animate-hover="shake">{% trans "Offer of the day" %}</a>  <a href="#">{% trans "Get flat 35% off on orders over $50!" %}</a>
+            </div>
+            <div class="col-md-6" data-animate="fadeInDown">
+                <ul class="menu">
+                    <li><a href="{% url 'page' 'contact' %}">
+                        {% trans "Contact" %}</a>
+                    </li>
+                    <li><a href="{% url 'recently_viewed' %}">
+                        {% trans "Recently viewed" %}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- *** TOP BAR END *** -->
+
+    <!-- *** NAVBAR ***
+ _________________________________________________________ -->
+
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="{% url 'home' %}" data-animate-hover="bounce">
+                    <img src="{{ config.logo.url }}" alt="{{ settings.SITE_TITLE }} logo" class="hidden-xs">
+                    <img src="{{ config.logo_small.url }}" alt="{{ settings.SITE_TITLE }} logo" class="visible-xs"><span class="sr-only">{{ page.title }} - {% trans "go to homepage" %}</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
+                        <span class="sr-only">{% trans "Toggle navigation" %}</span>
+                        <i class="fa fa-align-justify"></i>
+                    </button>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#search">
+                        <span class="sr-only">{% trans "Toggle search" %}</span>
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <a class="btn btn-default navbar-toggle" href="{% url 'shop_cart' %}">
+                        <i class="fa fa-shopping-cart"></i>  
+                        {% with request.cart.total_quantity as count %}
+                            <span class="hidden-xs">{{ count }} item{{ count|pluralize }} in cart</span>
+                        {% endwith %}
+                    </a>
+                </div>
+            </div>
+            <!--/.navbar-header -->
+            <div class="navbar-collapse collapse" id="navigation">
+                {% block navbar_dropdown_menu %}{% page_menu "pages/menus/dropdown.html" %}{% endblock%}
+            </div>
+            <!--/.nav-collapse -->
+            <div class="navbar-buttons">
+                {% with request.cart.total_quantity as count %}
+                <div class="navbar-collapse collapse right" id="basket-overview">
+                    <a href="{% url 'shop_cart' %}" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i><span class="hidden-sm">{% blocktrans %}{{ count }} item{{ count|pluralize }} in cart{% endblocktrans %}</span></a>
+                </div>
+                {% endwith %}
+                <!--/.nav-collapse -->
+
+                <div class="navbar-collapse collapse right" id="search-not-mobile">
+                    <button type="button" class="btn navbar-btn btn-primary" data-toggle="collapse" data-target="#search">
+                        <span class="sr-only">{% trans "Toggle search" %}</span>
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="collapse clearfix" id="search">
+                {% search_form "shop.Product" %}        
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /#navbar -->
+
+    <!-- *** NAVBAR END *** -->
+
+    <div id="all">
+        <div id="content">
+            {% block content %}
+                {% if messages %}    
+                    <div class="col-md-12" id="message-div">
+                    {% for message in messages %}
+                      <div class="alert alert-success alert-dismissable">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                        {{ message }}
+                      </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="col-md-12">
+                    <ul class="breadcrumb">
+                        {% spaceless %}
+                            {% block breadcrumb_menu %}
+                                {% page_menu "pages/menus/breadcrumb.html" %}
+                            {% endblock breadcrumb_menu %}
+                        {% endspaceless %}
+                    </ul>
+                </div>
+            {% endblock content %}
+        </div>
+        <!-- /#content -->
+
+        <!-- *** FOOTER ***
+ _________________________________________________________ -->
+        <div id="footer" data-animate="fadeInUp">
+            <div class="container">
+                <div class="row">
+                    {% block footer_menu %}{% page_menu "pages/menus/footer.html" %}{% endblock %}
+
+                    <div class="col-md-3 col-sm-6">
+                        <h4>{% trans "Where to find us" %}</h4>
+                        {{ config.footer_address|richtext_filters|safe }}
+                        <a href="{% url 'page' 'contact' %}">{% trans "Go to contact page" %}</a>
+
+                        <hr class="hidden-md hidden-lg">
+                    </div>
+                    <!-- /.col-md-3 -->
+
+
+                    <div class="col-md-3 col-sm-6">
+                        <h4>{% trans "Get the news" %}</h4>
+                        <p class="text-muted">{{ config.footer_subscribe_info }}</p>
+                        <form>
+                            <div class="input-group">
+                                <input type="text" class="form-control">
+                                <span class="input-group-btn">
+                    			    <button class="btn btn-default" type="button">{% trans "Subscribe!" %}</button>
+                    			</span>
+                            </div>
+                            <!-- /input-group -->
+                        </form>
+
+                        <hr>
+
+                        <h4>{% trans "Stay in touch" %}</h4>
+
+                        <p class="social">
+                            {% if settings.SOCIAL_LINK_FACEBOOK %}
+                                <a href="{{ settings.SOCIAL_LINK_FACEBOOK }}" class="facebook external" data-animate-hover="shake">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                            {% endif %}
+                            {% if settings.SOCIAL_LINK_FACEBOOK %}
+                                <a href="{{ settings.SOCIAL_LINK_TWITTER }}" class="twitter external" data-animate-hover="shake">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                            {% endif %}
+                            {% if settings.SOCIAL_LINK_INSTAGRAM %}
+                                <a href="{{ settings.SOCIAL_LINK_INSTAGRAM }}" class="instagram external" data-animate-hover="shake">
+                                    <i class="fa fa-instagram"></i>
+                                </a>
+                            {% endif %}
+                            {% if settings.SOCIAL_LINK_GOOGLE_PLUS %}
+                                <a href="{{ settings.SOCIAL_LINK_GOOGLE_PLUS }}" class="gplus external"  data-animate-hover="shake">
+                                    <i class="fa fa-google-plus"></i>
+                                </a>
+                            {% endif %}
+                            {% if settings.EMAIL_LINK %}
+                                <a href="{{ settings.EMAIL_LINK }}" class="email external"  data-animate-hover="shake">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <!-- /.col-md-3 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container -->
+        </div>
+        <!-- /#footer -->
+
+        <!-- *** FOOTER END *** -->
+
+        <!-- *** COPYRIGHT ***
+ _________________________________________________________ -->
+        <div id="copyright">
+            <div class="container">
+                <div class="col-md-6">
+                    <p class="pull-left">{% trans "© 2018 Your name goes here." %}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="pull-right">Template by <a href="https://bootstrapious.com/e-commerce-templates">Bootstrapious</a> & <a href="https://fity.cz">Fity</a>
+                         <!-- Not removing these links is part of the license conditions of the template. Thanks for understanding :) If you want to use the template without the attribution links, you can do so after supporting further themes development at https://bootstrapious.com/donate  -->
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- *** COPYRIGHT END *** -->
+    </div>
+    <!-- /#all -->
+
+    <!-- *** SCRIPTS TO INCLUDE ***
+ _________________________________________________________ -->
+    {% compress js %}
+        <script src="{% static 'js/vendor/jquery-1.11.0.min.js' %}"></script>
+        <script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/vendor/jquery.cookie.js' %}"></script>
+        <script src="{% static 'js/vendor/waypoints.min.js' %}"></script>
+        <script src="{% static 'js/vendor/modernizr.js' %}"></script>
+        <script src="{% static 'js/vendor/bootstrap-hover-dropdown.js' %}"></script>
+        <script src="{% static 'js/vendor/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'js/front.js' %}"></script>
+    {% endcompress %}
+    {% block extra_js %}{% endblock %}
+    {% editable_loader %}
+</body>
+
+</html>

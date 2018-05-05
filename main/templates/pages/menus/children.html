@@ -1,0 +1,11 @@
+<ul>
+	{% for page in page_branch %}
+	    {% if page.in_menu %}
+	        <li>
+	            <a href="{{ page.get_absolute_url }}">
+	                {{ page.title }}
+	            </a>
+	        </li>
+	    {% endif %}
+	{% endfor %}
+</ul>

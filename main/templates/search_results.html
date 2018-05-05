@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% load i18n mezzanine_tags %}
+
+{% block meta_title %}{% trans "Search Results" %}{% endblock %}
+{% block title %}{% trans "Search Results" %}{% endblock %}
+{% block extra_head %}
+<meta name="robots" content="noindex">
+{% endblock %}
+
+{% block breadcrumb_menu %}
+<li>
+    <a href="{% url "home" %}">{% trans "Home" %}</a>
+</li>
+<li class="active">{% trans "Search Results" %}</li>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="col-md-12">
+            <div class="box" id="text-page">
+                <h2>{% trans "Search Results" %}</h2>
+                <p>
+                    {% if results.paginator.count == 0 %}
+                    {% blocktrans %}
+                    No results were found in {{ search_type }} matching your query: {{ query }}
+                    {% endblocktrans %}
+                    {% else %}
+                    {% blocktrans with start=results.start_index end=results.end_index total=results.paginator.count %}
+                    Showing {{ start }} to {{ end }} of {{ total }} results in {{ search_type }} matching your query: {{ query }}
+                    {% endblocktrans %}
+                    {% endif %}
+                </p>
+                <div class="row">
+                    {% for result in results.object_list %}
+                    {% with result.get_absolute_url as result_url %}
+                        {% if result_url %}
+                            <div class="col-md-4">  
+                                <div class="col-md-4">    
+                                    <img src="{{ MEDIA_URL }}{% thumbnail result.image|default_if_none:"no_image.jpg" 100 100 %}" class="img-responsive">
+                                </div>  
+                                <div class="col-md-8">
+                                    <a href="{{ result_url }}">{{ result }}</a> 
+                                    {% if result.description != result|stringformat:"s" %}
+                                        <p>{{ result.description|truncatewords_html:20|safe }}</p>
+                                    {% endif %}
+                                    {% if result_url %}
+                                        <a href="{{ result_url }}">{% trans "read more" %}</a>
+                                    {% endif %} 
+                                </div>  
+                            </div>
+                        {% else %}
+                            {{ result }}
+                        {% endif %}
+                    {% endwith %}
+                    {% endfor %}
+                </div>
+                {% pagination_for results %}
+            </div>
+        </div>
+        <!-- /.col-md-12 -->
+    </div>
+{% endblock %}

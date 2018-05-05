@@ -1,0 +1,10 @@
+{% load i18n pages_tags %}
+<li>
+    {% trans "All Categories" %}
+</li>
+<li>
+    {% for ctg in ctgs %}
+        <a href="{{ ctg.get_absolute_url }}">{{ ctg.title|title }}</a>
+        {% if not forloop.last %} | {% endif %}
+    {% endfor %}
+</li>

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load widget_tweaks staticfiles mezzanine_tags shop_tags i18n %}
+
+{% block meta_title %}Checkout{% endblock %}
+{% block title %}Checkout{% endblock %}
+{% block body_id %}checkout{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/vendor/clipboard.min.js' %}"></script>
+  <script src="{% static 'js/pay-now-button-v2.js' %}"></script>
+{% endblock %}
+
+{% block breadcrumb_menu %}
+    <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+    <li>Checkout</li>
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+
+        {{ block.super }}
+
+        <div class="col-md-9" id="checkout">
+            <div class="box">
+                <form id="checkoutForm" method="post">
+                    <h1>{% trans "Checkout" %}</h1>
+                    <ul class="nav nav-pills nav-justified">
+                        {% for step in steps %}
+                            <li class="{% if step.title == step_title %}active{% else %}disabled{% endif %}">
+                              <a href="#"><i class="fa fa-{% cycle 'map-marker' 'btc' %}"></i><br>{{ step.title }}</a>
+                            </li>
+                        {% endfor %}
+                        <li class="disabled">
+                            <a href="#"><i class="fa fa-check %}"></i><br>{% trans "Complete" %}</a>
+                        </li>
+                    </ul> 
+                    {% block fields %}{% endblock %}
+                    
+                    <div class="box-footer">
+                        <div class="pull-left">
+                            <a href="{% url 'shop_cart' %}" class="btn btn-default">
+                                <i class="fa fa-chevron-left"></i>{% trans "Back to Cart" %}
+                            </a>
+                        </div>
+                        {% if CHECKOUT_STEP_FIRST %}
+                            <div class="pull-right">
+                                <button type="submit" class="btn btn-primary">{% trans "Continue to Payment" %}<i class="fa fa-chevron-right"></i></button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col-md-9 -->
+        <div class="col-md-3">
+            <div class="box" id="order-summary">
+                <div class="box-header">
+                    <h3>{% trans "Order summary" %}</h3>
+                </div>
+                <p class="text-muted">
+                    {% trans "Shipping and additional costs are calculated based on the values you have entered." %}
+                </p>
+                {% order_totals %}
+            </div>
+        </div>
+        <!-- /.col-md-3 -->
+    </div>
+    <!-- /.container -->
+{% endblock %}

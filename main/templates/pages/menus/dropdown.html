@@ -1,0 +1,49 @@
+{% load i18n pages_tags %}
+{% spaceless %}
+{% if page_branch_in_menu %}
+
+{% if branch_level == 0 %}
+    <ul class="nav navbar-nav navbar-left">
+        {% for page in page_branch %}
+        {% if not has_home and page.is_primary and forloop.first %}
+        <li{% if on_home %} class="active"{% endif %} id="dropdown-menu-home">
+            <a href="{% url "home" %}">{% trans "Home" %}</a>
+        </li>
+        {% endif %}
+        {% if page.in_menu %}
+        <li class="{% if page.has_children_in_menu %}dropdown yamm-fw{% endif %}
+                   {% if page.is_current_or_ascendant %}active{% endif %}"
+            id="{{ page.html_id }}">
+            <a href="{{ page.get_absolute_url }}" 
+            {% if page.has_children_in_menu %}
+            class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200"
+            {% endif %}>
+                {{ page.title }}
+                {% if page.has_children_in_menu %}<b class="caret"></b>{% endif %}
+            </a>
+            {% if page.has_children_in_menu %}{% page_menu page %}{% endif %}
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+{% else %}
+    <ul class="dropdown-menu">
+        <li>
+            <div class="yamm-content">
+                <div class="row">
+                    {% for page in page_branch %}
+                    {% if page.in_menu %}
+                        <div class="col-sm-3">
+                            <h5>{{ page.title }}</h5>
+                            {% if page.has_children_in_menu %}{% page_menu page "pages/menus/children.html" %}{% endif %}
+                        </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </li>
+    </ul>
+{% endif %}
+
+{% endif %}
+{% endspaceless %}

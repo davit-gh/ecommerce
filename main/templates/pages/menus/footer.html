@@ -1,0 +1,33 @@
+{% load i18n pages_tags %}
+
+{% spaceless %}
+	{% if page_branch_in_menu %}
+		<div class="col-md-3 col-sm-6">
+	         <h4>Pages</h4>
+	         <ul>
+		         {% for page in page_branch %}
+					{% if page.in_menu and not page.category %}
+						<li>
+				            <a href="{{ page.get_absolute_url }}">
+				                {{ page.title }}
+				            </a>
+				        </li>
+				    {% endif %}
+				{% endfor %}
+			</ul>
+			<hr class="hidden-md hidden-lg hidden-sm">
+	    </div>
+	    <div class="col-md-3 col-sm-6">
+	        <h4>Top Categories</h4>
+			{% for page in page_branch %}
+				{% if page.in_menu and page.category %}
+					<h5>{{ page.title }}</h5>
+					{% if page.has_children_in_menu  %}
+						{% page_menu page "pages/menus/children.html" %}
+					{% endif %}	
+				{% endif %}		
+			{% endfor %}
+			<hr class="hidden-md hidden-lg">
+		</div>
+	{% endif %}
+{% endspaceless %}

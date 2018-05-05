@@ -1,0 +1,144 @@
+{% extends "blog/blog_post_list.html" %}
+{% load mezzanine_tags disqus_tags comment_tags keyword_tags rating_tags i18n static %}
+
+{% block meta_title %}{{ blog_post.meta_title }}{% endblock %}
+
+{% block meta_keywords %}{% metablock %}
+{% keywords_for blog_post as tags %}
+{% for tag in tags %}{% if not forloop.first %}, {% endif %}{{ tag }}{% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ blog_post.description }}
+{% endmetablock %}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/vendor/star-rating.min.css' %}">    
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/vendor/star-rating.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        
+        {% block breadcrumb_menu %}
+        <div class="col-md-12">
+            <ul class="breadcrumb">
+                {{ block.super }}
+                <li class="active">{{ blog_post.title }}</li>
+            </ul>
+        </div>
+        {% endblock %}
+
+        <div class="col-sm-9" id="blog-post">
+            <div class="box">
+                <h1>{{ blog_post.title }}</h1>
+                <p class="author-date">By 
+                	{% with blog_post.user as author %}
+                    	<a href="{% url "blog_post_list_author" author %}">{{ author.get_full_name|default:author.username }}</a> | {% blocktrans with sometime=blog_post.publish_date|timesince %}{{ sometime }} ago{% endblocktrans %} 
+                    {% endwith %}
+                	{% if blog_post.allow_comments %}
+				        {% if settings.COMMENTS_DISQUS_SHORTNAME %}
+				            | (<a href="{{ blog_post.get_absolute_url }}#disqus_thread"
+				                data-disqus-identifier="{% disqus_id_for blog_post %}">
+                                {% spaceless %}{% trans "Comments" %}{% endspaceless %}</a>)
+				        {% endif %}
+				    {% endif %}
+                </p>
+                {% editable blog_post.lead %}
+                    <p class="lead">
+                        {{ blog_post.lead|default:""|safe }}
+                    </p>
+                {% endeditable %}
+                {% if settings.BLOG_USE_FEATURED_IMAGE and blog_post.featured_image %}
+                    <p><img class="img-responsive" src="{{ MEDIA_URL }}{{ blog_post.featured_image }}" alt="blog_post.featured_image.filename_root"></p>
+                {% endif %}
+                <div id="post-content">
+                    {% editable blog_post.content %}
+                        {{ blog_post.content|richtext_filters|safe }}
+                    {% endeditable %}
+                </div>
+                <!-- /#post-content -->
+                {% if settings.COMMENTS_DISQUS_SHORTNAME %}
+                    {% include "generic/includes/disqus_counts.html" %}
+                {% endif %}
+
+                <div id="details" class="col-xs-12 text-center header-top">
+                    {% block blog_post_detail_keywords %}
+                        {% keywords_for blog_post as tags %}
+                        {% if tags %}
+                            {% spaceless %}
+                                <ul class="list-inline tags">
+                                    <li>{% trans "Tags" %}:</li>
+                                    {% for tag in tags %}
+                                    <li><a href="{% url "blog_post_list_tag" tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endspaceless %}
+                        {% endif %}
+                    {% endblock %}
+
+                    {% rating_for blog_post %}
+
+                    {% block blog_post_previous_next %}
+                        <ul class="pager">
+                        {% with blog_post.get_previous_by_publish_date as previous %}
+                        {% if previous %}
+                        <li class="previous">
+                            <a class="btn btn-default" href="{{ previous.get_absolute_url }}"> <i class="fa fa-arrow-left"></i>{{ previous }}</a>
+                        </li>
+                        {% endif %}
+                        {% endwith %}
+                        {% with blog_post.get_next_by_publish_date as next %}
+                            {% if next %}
+                                <li class="next">
+                                    <a class="btn btn-default" href="{{ next.get_absolute_url }}">{{ next }} <i class="fa fa-arrow-right"></i></a>
+                                </li>
+                            {% endif %}
+                        {% endwith %}
+                        </ul>
+                    {% endblock %}
+
+                    <div class="social">
+                      	<span>Share this post:&nbsp;&nbsp;&nbsp;</span>
+                      	{% include 'includes/social.html' with item=blog_post %}
+                    </div><!-- .post-share -->
+                </div>
+                {% if related_posts %}
+                    <div id="related-posts">
+                    <h3>{% trans 'Related posts' %}</h3>
+                    <ul class="list-unstyled">
+                    {% for post in related_posts %}
+                        <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                    {% endfor %}
+                    </ul>
+                    </div>
+                {% endif %}    
+                {% block blog_post_detail_comments %}
+                    {% if blog_post.allow_comments %}{% comments_for blog_post %}{% endif %}
+               {% endblock %}
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /#blog-post -->
+
+        <div class="col-md-3">
+            <!-- *** BLOG MENU ***
+_________________________________________________________ -->
+            <div class="panel panel-default sidebar-menu">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{% trans "Blog" %}</h3>
+                </div>
+                <div class="panel-body">
+					{% include "blog/includes/filter_panel.html" %}
+                </div>
+            </div>
+            <!-- /.col-md-3 -->
+
+            <!-- *** BLOG MENU END *** -->
+        </div>
+    </div>
+    <!-- /.container -->
+{% endblock %}

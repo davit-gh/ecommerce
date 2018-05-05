@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static shop_tags mezzanine_tags i18n %}
+
+{% block meta_title %}{{ product.meta_title }}{% endblock %}
+
+{% block meta_keywords %}{% metablock %}
+{% for keyword in product.keywords.all %}
+    {% if not forloop.first %}, {% endif %}
+    {{ keyword }}
+{% endfor %}
+{% endmetablock %}{% endblock %}
+
+{% block meta_description %}{% metablock %}
+{{ product.description }}
+{% endmetablock %}{% endblock %}
+
+{% block breadcrumb_menu %}
+    {% include "pages/menus/product_breadcrumb.html" with ctgs=product.categories.all %}
+{% endblock %}
+
+{% block extra_js %}
+    <script>var variations = {{ variations_json|safe }};</script>
+    <script src="{% static 'js/shop/product_variations.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        {{ block.super }}
+
+        <div class="col-md-3">
+            {% include "shop/includes/left_sidebar.html" %}
+        </div>
+
+        <div class="col-md-9">
+            {% editable product.title product.content %}
+            <div class="row" id="productMain">
+                <div class="col-sm-6">
+                    <div id="mainImage">
+                        <img src="{{ images.first.file.url }}" alt="" class="img-responsive">
+                    </div>
+                    {% if product.on_sale %}
+                        <div class="ribbon sale">
+                            <div class="theribbon">{% trans "SALE" %}</div>
+                            <div class="ribbon-background"></div>
+                        </div>
+                        <!-- /.ribbon -->
+                    {% endif %}
+                    {% if product.is_new %}
+                        <div class="ribbon new">
+                            <div class="theribbon">{% trans "NEW" %}</div>
+                            <div class="ribbon-background"></div>
+                        </div>
+                        <!-- /.ribbon -->
+                    {% endif %}
+                </div>
+                <div class="col-sm-6">
+                    <div class="box">
+                        <h1 class="text-center">{{ product }}</h1>
+                        <p class="goToDescription">
+                            <a href="#details" class="scroll-to">{% trans "Scroll to product details, material & care and sizing" %}</a>
+                        </p>
+                        {% if product.available and has_available_variations %}
+                            <ul id="variations" class="list-unstyled">
+                                {% for variation in variations %}
+                                <li id="variation-{{ variation.sku }}"
+                                    {% if not variation.default %}style="display:none;"{% endif %}>
+                                    {% if variation.has_price %}
+                                      <div class="centered">
+                                        {% if variation.on_sale %} 
+                                            <del>{{ variation.unit_price|currency }}</del>
+                                            <span class="onsale">{% trans "On sale:" %}</span>
+                                        {% endif %}
+                                        <p class="price">{{ variation.price|currency }}</p>
+                                      </div>
+                                    {% else %}
+                                        {% if has_available_variations %}
+                                            <span class="error-msg">
+                                                {% trans "The selected options are currently unavailable." %}
+                                            </span>
+                                        {% endif %}
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% errors_for add_product_form %}
+                            <form id="add-to-cart-form" method="post">
+                                {% fields_for add_product_form %}
+                                <p class="text-center buttons">
+                                    <button type="submit" name="add_cart" class="btn btn-primary">
+                                        {% trans "Add to cart" %}<i class="fa fa-shopping-cart"></i>
+                                    </button>
+                                    {% if settings.SHOP_USE_WISHLIST %}
+                                        <button type="submit" name="add_wishlist" class="btn btn-default">
+                                            {% trans "Add to wishlist" %}<i class="fa fa-heart"></i></button>
+                                    {% endif %}
+                                </p>
+                            </form>
+                        {% else %}
+                            <p class="error-msg">{% trans "This product is currently unavailable." %}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="row" id="thumbs">
+                        {% for image in images %}  
+                            <div class="col-xs-4">
+                                <a id="image-{{ image.id }}" href="{{ MEDIA_URL }}{{ image.file }}" class="thumb">
+                                    <img src="{{ MEDIA_URL }}{% thumbnail image.file 108 108 %}" alt="{{ image.description }}" class="img-responsive">
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endeditable %}
+
+            <div class="box" id="details">
+                <h4>{% trans "Product details" %}</h4>
+                {{ product.content|richtext_filters|safe }}
+                <hr>
+                <div class="social">
+                    <h4>{% trans "Show it to your friends" %}</h4>
+                    {% include "includes/social.html" with item=product %}
+                </div>
+            </div>
+
+            <div class="row same-height-row">
+                {% if settings.SHOP_USE_RELATED_PRODUCTS and related_products %}
+                    <div class="col-md-3 col-sm-6">
+                        <div class="box same-height">
+                            <h3>{% trans "You may also like these products" %}</h3>
+                        </div>
+                    </div>
+                    {% for product in related_products %} 
+                        {% if product.available %}    
+                          <div class="col-md-3 col-sm-6">
+                              <div class="product same-height">
+                                  {% include "shop/includes/single_product.html" %}
+                              </div> <!-- /.product -->
+                          </div> 
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            {% if recent_products %}
+                <div class="row same-height-row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="box same-height">
+                            <h3>{% trans "Products viewed recently" %}</h3>
+                        </div>
+                    </div>
+
+                    {% for product in recent_products %}
+                        <div class="col-md-3 col-sm-6">
+                            <div class="product same-height">
+                                {% include "shop/includes/single_product.html" %}
+                            </div>
+                            <!-- /.product -->
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+      </div>
+      <!-- /.col-md-9 -->
+  </div>
+  <!-- /.container -->
+{% endblock %}

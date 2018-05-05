@@ -1,0 +1,44 @@
+{% load mezzanine_tags shop_tags i18n %}
+<div class="flip-container">
+    <div class="flipper">
+        <div class="front">
+            <a href="{{ product.get_absolute_url }}">
+                <img src="{{ MEDIA_URL }}{% thumbnail product.image 450 600 %}" alt="{{ product.title }}" class="img-responsive">
+            </a>
+        </div>
+        <div class="back">
+            <a href="{{ product.get_absolute_url }}">
+                <img src="{{ MEDIA_URL }}{% thumbnail product.image_back 450 600 %}" alt="{{ product.title }}" class="img-responsive">
+            </a>
+        </div>
+    </div>
+</div>
+<a href="{{ product.get_absolute_url }}" class="invisible">
+    <img src="{{ MEDIA_URL }}{% thumbnail product.image 450 600 %}" alt="{{ product.title }}" class="img-responsive">
+</a>
+<div class="text">
+    <h3><a href="{{ product.get_absolute_url }}">{{ product }}</a></h3>
+    <p class="price">
+        {% if product.has_price %}
+            {% if product.on_sale %}
+                <del>{{ product.unit_price|currency }}</del>
+            {% endif %}
+            {{ product.price|currency }}
+        {% else %}
+            <span class="coming-soon">{% trans "Coming soon" %}</span>
+        {% endif %}
+    </p>
+</div>
+<!-- /.text -->
+{% if product.on_sale %}
+    <div class="ribbon sale">
+        <div class="theribbon">{% trans "SALE" %}</div>
+        <div class="ribbon-background"></div>
+    </div>
+{% endif %}
+{% if product.is_new %}
+    <div class="ribbon new">
+        <div class="theribbon">{% trans "NEW" %}</div>
+        <div class="ribbon-background"></div>
+    </div>
+{% endif %}

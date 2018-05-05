@@ -1,0 +1,61 @@
+{% load pages_tags custom_tags i18n %}
+<!-- *** MENUS AND FILTERS ***
+ _________________________________________________________ -->
+<div class="panel panel-default sidebar-menu">
+	<div class="panel-heading">
+		<h3 class="panel-title">{% trans "Pages" %}</h3>
+	</div>
+	<div class="panel-body">
+		{% block tree_menu %}{% page_menu "pages/menus/tree.html" %}{% endblock %}
+	</div>
+</div>
+
+{% product_options as options %}
+<div class="panel panel-default sidebar-menu">
+	{% with options|by_type:1 as type1_options %}
+	<div class="panel-heading">
+		<h3 class="panel-title">{{ type1_options.0.get_type_display }} <a class="btn btn-xs btn-danger pull-right clear-btn" href="#"><i class="fa fa-times-circle"></i> Clear</a></h3>
+	</div>
+
+	<div class="panel-body">
+		<form action="{% url 'filter_by_options' %}" method="POST">
+			{% csrf_token %}
+			<div class="form-group">			 
+			  	{% for option in type1_options %}
+				  	<div class="checkbox">
+					  	<label>
+							<input name="checkboxes" value="{{ option.id }}" type="checkbox"> {{ option.name }}
+					  	</label>
+				  	</div>
+			  	{% endfor %}				
+			</div>
+			<button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> {% trans "Apply" %}</button>
+		</form>
+	</div>
+	{% endwith %}
+</div>
+
+<div class="panel panel-default sidebar-menu">
+	{% with options|by_type:2 as type2_options %}
+	<div class="panel-heading">
+		<h3 class="panel-title">{{ type2_options.0.get_type_display }} <a class="btn btn-xs btn-danger pull-right clear-btn" href="#"><i class="fa fa-times-circle"></i> Clear</a></h3>
+	</div>
+
+	<div class="panel-body">
+		<form action="{% url 'filter_by_options' %}" method="POST">
+			{% csrf_token %}
+			<div class="form-group">
+			  	{% for option in type2_options %}
+				  	<div class="checkbox">
+					  	<label>
+						  	<input name="checkboxes" value="{{ option.id }}" type="checkbox"> <span class="colour {{ option.name|lower }}"></span> {{ option.name }}
+					  	</label>
+				  	</div>
+			  	{% endfor %}
+			</div>
+			<button class="btn btn-default btn-sm btn-primary"><i class="fa fa-pencil"></i> {% trans "Apply" %}</button>
+		</form>
+	</div>
+	{% endwith %}
+</div>
+<!-- *** MENUS AND FILTERS END *** -->

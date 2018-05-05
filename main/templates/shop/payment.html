@@ -1,0 +1,43 @@
+{% extends "shop/checkout.html" %}
+{% load i18n mezzanine_tags shop_tags custom_tags btc_tags static %}
+
+{% block extra_js %}
+  <script src="{% static 'js/vendor/clipboard.min.js' %}"></script>
+  <script src="{% static 'js/blockchain.js' %}"></script>
+{% endblock %}
+
+{% block fields %}
+{% if request.cart.has_items %}
+{% errors_for form %}
+	<h2>{% trans "Pay in Bitcoin Directly" %}</h2>
+	<div class="row">
+		<div class="blockchain-btn col-xs-12 text-center">              
+				{% get_total as total %}
+				{% btc_context total as btc %}
+				<div class="stage-ready">
+				 	{% blocktrans with btc_total=btc.btc_total total=total|currency address=btc.address %}
+				 		Please send <b><span class="tobecopied" data-clipboard-text="{{ btc_total }}" data-toggle="tooltip" title="copied">{{ btc_total }}</span> BTC</b> ({{ total }}) to <br /> <b id="rel"><span id="address" class="tobecopied" data-clipboard-text="{{ address }}" data-toggle="tooltip" title="copied">{{ address }}</span></b> <br/> 
+				 	{% endblocktrans %}
+				  	<div class='qr-code'><img src="https://blockchain.info/qr?data={{ btc.address }}&size=200"></div>
+				  	<a target="_blank" class="btn btn-info btn-icon-right" href="bitcoin:{{ btc.address }}?amount={{ btc.btc_total }}&amp;r={{ request.META.HTTP_REFERER|urlencode }}">
+				    	{% trans "Open in wallet" %}<i class="fa fa-external-link"></i>
+				  	</a>
+					<div class="row">
+						<div id="awaiting" class="col-xs-6 col-xs-offset-3">
+						<span>{% trans "Awaiting Payment..." %}</span>
+						<img src="{% static 'img/spinner.gif' %}">
+						</div>
+					</div>
+				</div>
+			
+			<div class="hidden stage-paid">
+			  Payment Received <b>[[value]] BTC</b>. Thank You.
+			</div>
+		</div>           
+	</div>
+	<!-- The value will be replaced with latest invoice_id -->
+    <input type="hidden" id="invoice_id" name="invoice_id" value="{{ btc.invoice_id }}">
+
+	{% fields_for form.hidden_fields %}
+{% endif %}
+{% endblock %}

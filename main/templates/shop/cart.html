@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load shop_tags static widget_tweaks mezzanine_tags i18n %}
+
+{% block meta_title %}{% trans "Your Cart" %}{% endblock %}
+{% block title %}{% trans "Your Cart" %}{% endblock %}
+{% block body_id %}cart{% endblock %}
+
+{% block extra_js %}
+	<script src="{% static 'js/updateCart.js' %}"></script>
+{% endblock %}
+
+{% block breadcrumb_menu %}
+    <li><a href="{% url 'home' %}">{% trans "Home" %}</a></li>
+    <li>Shopping cart</li>
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		
+	{{ block.super }}
+		
+	{% if cart_formset.forms %}
+        <div class="col-md-9" id="basket">
+            <div class="box">	         
+                <form  id="cart-form" method="post">
+                	{% csrf_token %}
+					<div id="cart-errors">
+					{% if cart_formset.errors %}
+						{% for error in cart_formset.errors %}
+						{% if error.values.0 %}
+							{% for err in error.values.0 %}
+								<p class="text-danger">{{ err }}</p>
+							{% endfor %}
+						{% endif %}
+						{% endfor %}
+					{% endif %} 
+					</div>
+					{{ cart_formset.management_form }}
+
+                    <h1>{% trans "Shopping cart" %}</h1>  
+                    <p class="text-muted">
+                    	{% blocktrans with quantity=request.cart.total_quantity %}
+                    		You currently have {{ quantity }} item{{ quantity|pluralize }} in your cart.
+	                    {% endblocktrans %}
+                    </p>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">{% trans "Product" %}</th>
+                                    <th>{% trans "Quantity" %}</th>
+                                    <th>{% trans "Unit price" %}</th>
+                                    <th colspan="2">{% trans "Total" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for form in cart_formset.forms %}
+		    						{% with form.instance as item %}
+		                                <tr class="item">
+		                                    <td>
+		                                        <a href="{{ item.get_absolute_url }}">
+		                                            <img src="{{ MEDIA_URL }}{{ item.image }}" alt="{{ item.description }}">
+		                                        </a>
+		                                    </td>
+		                                    <td><a href="{{ MEDIA_URL }}{{ item.image }}">{{ item.description }}</a>
+		                                    </td>
+		                                    <td class="count-input">
+		                                        {% render_field form.quantity class="form-control" oninput="updateCart();" %}
+		                                        {{ form.id }}
+		                                    </td>
+		                                    <td>{{ item.unit_price|currency }}</td>
+		                                    <td>{{ item.total_price|currency }}</td>
+		                                    <td>{% render_field form.DELETE style="display: none" %}
+		                                    	<a href="#" onclick="removeItem(this);"><i class="fa fa-trash-o"></i></a>
+		                                    </td>
+		                                </tr>
+		                            {% endwith %}
+		                        {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4">{% trans "Total" %}</th>
+                                    <th colspan="2">{{ request.cart.total_price|currency }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                    
+                    <div class="box-footer">
+                        <div class="pull-left">
+                            <a href="{% url 'home' %}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Continue shopping</a>
+                        </div>
+                        <div class="pull-right">
+                        <a href="{% url "shop_checkout" %}" class="btn btn-primary">
+                        	{% if request.session.order.step %}
+                        		<i class="fa fa-chevron-left"></i>{% trans "Return to Checkout" %}
+                        	{% else %}
+                        		{% trans "Proceed to Checkout" %}<i class="fa fa-chevron-right"></i>
+                        	{% endif %}
+                        </a>
+                        </div>
+                    </div>
+                </form>
+              
+            </div>
+            <!-- /.box -->
+
+			{% if settings.SHOP_USE_UPSELL_PRODUCTS %}
+			{% with request.cart.upsell_products as upsell_products %}
+			{% if upsell_products %}
+	            <div class="row same-height-row">
+	                <div class="col-md-3 col-sm-6">
+	                    <div class="box same-height">
+	                        <h3>{% trans "You may also like these products" %}</h3>
+	                    </div>
+	                </div>
+	                {% for product in upsell_products %}
+		                <div class="col-md-3 col-sm-6">
+		                    <div class="product same-height">
+		                        {% include 'shop/includes/single_product.html' %}
+		                    </div>
+		                    <!-- /.product -->
+		                </div>
+		            {% endfor %}
+	            </div>
+	        {% endif %}
+			{% endwith %}
+			{% endif %}
+        </div>
+        <!-- /.col-md-9 -->
+
+        <div class="col-md-3">
+            <div class="box" id="order-summary">
+                <div class="box-header">
+                    <h3>{% trans "Order summary" %}</h3>
+                </div>
+                <p class="text-muted">{% trans "Shipping and additional costs are calculated based on the values you have entered." %}</p>
+                {% order_totals %}
+            </div>
+
+            {% if discount_form %}
+	            <div class="box">
+	                <div class="box-header">
+	                    <h4>{% trans "Coupon code" %}</h4>
+	                </div>
+	                <p class="text-muted">{% trans "If you have a coupon code, please enter it in the box below." %}</p>
+	                <form method="post">
+	                	{% csrf_token %}
+	                    <div class="input-group">
+	                        {{ discount_form.discount_code|attr:"class:form-control" }}
+	                        <span class="input-group-btn">
+								<button id="cpn-bt" class="btn btn-primary" type="submit"><i class="fa fa-gift"></i></button>
+						    </span>
+	                    </div>
+	                    <!-- /input-group -->
+	                </form>
+	            </div>
+	        {% endif %}
+        </div>
+        <!-- /.col-md-3 -->
+	{% else %}
+		<h3 class="text-center">{% trans "Your Cart is empty." %}</h3>
+	{% endif %}
+    </div>
+    <!-- /.container -->
+{% endblock %} 

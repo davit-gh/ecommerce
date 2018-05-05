@@ -1,0 +1,71 @@
+{% extends "shop/base.html" %}
+{% load i18n %}
+
+{% block body_id %}complete{% endblock %}
+
+{% block meta_title %}{% trans "Order Complete" %}{% endblock %}
+
+{% block footer_js %}
+{{ block.super }}
+{% if settings.GOOGLE_ANALYTICS_ID and not request.user.is_staff %}
+<script>
+
+var decimal = function(amount) {
+    if (amount.toString().indexOf('.') == -1) {
+        amount += '.00';
+    }
+    return String(amount);
+};
+
+ga('require', 'ecommerce');     // Load the ecommerce plug-in.
+
+// Add transaction data.
+ga('ecommerce:addTransaction', {
+    'id': '{{ order.id }}',
+    'affiliation': '',
+    'revenue': decimal({{ order.item_total }}{% if order.discount_total %} - {{ order.discount_total }}{% endif %}),
+    'shipping': decimal({{ order.shipping_total }}),
+    'tax': decimal({% if order.tax_total %}{{ order.tax_total }}{% else %}0{% endif %})
+});
+
+// Add item data for each item.
+{% for item in items %}
+ga('ecommerce:addItem', {
+    // order ID (not item)
+    'id': '{{ order.id }}',
+    'name': '{{ item.name|escapejs }}',
+    'sku': '{{ item.sku }}',
+    'category': '{{ item.description|escapejs }}',
+    // unit price (not total)
+    'price': decimal({{ item.unit_price }}),
+    'quantity': '{{ item.quantity }}'
+});
+{% endfor %}
+
+// submits transaction to the Analytics servers
+ga('ecommerce:send');
+
+</script>
+{% endif %}
+{% endblock %}
+
+{% block title %}{% trans "Order Complete" %}{% endblock %}
+
+{% block content %}
+    <div id="thankyou-div" class="text-center">
+        <h3>{% blocktrans %}Thank you for shopping with us, your order is <strong>complete</strong>!{% endblocktrans %}</h3>
+        <p>{% trans "We've sent you a receipt via email." %}</p>
+        <p>{% trans "You can also view your invoice using one of the links below." %}</p>
+        <br>
+        <form class="order-complete-form" method="post" action="{% url "shop_invoice_resend" order.id %}?next={{ request.path }}">
+            {% csrf_token %}
+            {% if has_pdf %}
+                <a class="btn btn-primary" href="{% url "shop_invoice" order.id %}?format=pdf">
+                    {% trans "Download PDF invoice" %}
+                </a>
+            {% endif %}
+            <a class="btn btn-default" target="_blank" href="{% url "shop_invoice" order.id %}">{% trans "View invoice in your browser" %}</a>
+            <input type="submit" class="btn btn-default" value="{% trans "Re-send order email" %}">
+        </form>
+    </div>
+{% endblock %}

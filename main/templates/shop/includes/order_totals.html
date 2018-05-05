@@ -1,0 +1,68 @@
+{% load shop_tags i18n %}
+
+<div class="table-responsive">
+    <table class="table">
+        <tbody>
+            {% if discount_total or shipping_total %}
+                <tr>
+                    <td>
+                        {% trans "Order subtotal" %}:
+                    </td>
+                    <th>
+                        {{ item_total|currency }}
+                    </th>
+                </tr>
+            {% endif %}
+            {% if discount_total %}
+                <tr>
+                    <td>
+                        {% if discount_type %}
+                        {{ discount_type }}:
+                        {% else %}
+                        {% trans "Discount" %}:
+                        {% endif %}
+                    </td>
+                    <th>
+                        {{ discount_total|currency }}
+                    </th>
+                </tr>
+            {% endif %}
+            {% if shipping_type or shipping_total %}
+                <tr>
+                    <td>
+                        {% if shipping_type %}
+                        {{ shipping_type }}:
+                        {% else %}
+                        {% trans "Shipping and handling" %}:
+                        {% endif %}
+                    </td>
+                    <th>
+                        {{ shipping_total|currency }}
+                    </th>
+                </tr>
+            {% endif %}
+            {% if tax_total %}
+                <tr>
+                    <td>
+                        {% if tax_type %}
+                        {{ tax_type }}:
+                        {% else %}
+                        {% trans "Tax" %}:
+                        {% endif %}
+                    </td>
+                    <th>
+                        {{ tax_total|currency }}
+                    </th>
+                </tr>
+            {% endif %}
+            <tr class="total">
+                <td>
+                    {% trans "Total" %}:
+                </td> 
+                <td>
+                    {{ order_total|currency }}
+                </td>
+            </tr>   
+        </tbody>
+    </table>   
+</div>

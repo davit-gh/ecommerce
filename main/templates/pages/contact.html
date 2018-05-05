@@ -1,0 +1,65 @@
+{% extends 'pages/page.html' %}
+{% load mezzanine_tags static i18n %}
+
+{% block extra_js %}
+	    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
+	    <script src="{% static 'js/gmap.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+
+                {{ block.super }}
+
+                <div class="col-md-3">
+                	{% include "shop/includes/left_sidebar.html" %}
+                </div>
+
+                <div class="col-md-9">
+                    {% editable page.form.title page.form.content %}
+                        <div class="box" id="contact">
+                            <h1>{{ page.form.title }}</h1>
+                            {% if request.GET.sent %}
+    					        <div class="row">
+                                    <div class="alert alert-success col-md-6 col-md-offset-3 text-center">
+                                        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                                            {{ page.form.response|richtext_filters|safe }}
+                                    </div>
+    					        </div>
+    					    {% endif %}
+                            {{ page.form.content|richtext_filters|safe }}
+                            <hr>
+
+                            <div class="row">
+                            	{% for blurb in page.form.blurbs.all %}
+    	                            <div class="col-sm-4">
+    	                                <h3><i class="fa fa-{{ blurb.icon_class }}"></i> {{ blurb.title }}</h3>
+                                        {% editable blurb.content %}    
+                                            {{ blurb.content|safe }}
+                                        {% endeditable %}
+    	                            </div>
+                                {% endfor %}
+                            </div>
+                            <!-- /.row -->
+
+                            <hr>
+
+                            <div id="map"></div>
+
+                            <hr>
+                            <h2>{% trans "Contact form" %}</h2>
+
+                            <form method="post">
+                            	{% csrf_token %}
+                                {% fields_for form %}
+                                <div class="row text-center">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-envelope-o"></i> {{ page.form.button_text }}</button>
+                                </div>
+                            </form>
+                        </div>
+                    {% endeditable %}
+                </div>
+                <!-- /.col-md-9 -->
+            </div>
+            <!-- /.container -->
+{% endblock %}

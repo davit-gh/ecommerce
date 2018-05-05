@@ -1,0 +1,34 @@
+{% extends 'shop/checkout.html' %}
+{% load mezzanine_tags widget_tweaks static i18n %}
+
+{% block extra_js %}
+    <script src="{% static "js/custom.js" %}"></script>
+{% endblock %}
+
+{% block fields %}  
+<div class="content">
+    <fieldset>
+        <legend>{% trans "Billing Details" %}</legend>
+        {% fields_for form.billing_detail_fields %}
+    </fieldset>
+
+    <fieldset>
+        <legend>{% trans "Delivery Details" %}</legend>
+        <div class="form-group">  
+            {{ form.same_billing_shipping.label_tag }}
+            {{ form.same_billing_shipping }}
+        </div>
+        <div id="shipping_fields">
+            {% fields_for form.shipping_detail_fields %}
+        </div>
+        <div class="form-group">
+            {{ form.additional_instructions.label_tag }}
+            {{ form.additional_instructions|attr:"class:form-control" }}
+        </div>
+        <div>  
+            {{ form.remember.label_tag }}
+            {{ form.remember }}
+        </div>
+    </fieldset>
+</div>
+{% endblock fields %}

@@ -1,0 +1,152 @@
+{% extends "pages/page.html" %}
+{% load static mezzanine_tags shop_tags blog_tags i18n %}
+{% block content %}
+
+    <div class="container">
+        {% editable page.homepage.product_heading page.homepage.second_slider_heading page.homepage.second_slider_subheading page.homepage.blog_heading page.homepage.blog_subheading %}
+        <div class="col-md-12">
+            <div id="main-slider">
+                {% with page.children.first.gallery as first_slider %}
+                    {% if first_slider %}
+                        {% for image in first_slider.images.all %}    
+                            <div class="item">
+                                <img src="{{ image.file.url }}" alt="{{ image.description }}" class="img-responsive">
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <!-- /#main-slider -->
+        </div>        
+        {% endeditable %}
+    </div>
+
+    <!-- *** ADVANTAGES HOMEPAGE ***
+_________________________________________________________ -->
+    <div id="advantages">
+
+        <div class="container">
+            <div class="same-height-row">
+                {% for blurb in page.homepage.blurbs.all %}
+                    <div class="col-sm-4">
+                        {% editable blurb.title blurb.content %}    
+                        <div class="box same-height clickable">
+                            <div class="icon"><i class="fa fa-{{ blurb.icon_class }}"></i>
+                            </div>
+                            <h3><a href="{{ blurb.link }}">{{ blurb.title }}</a></h3>
+                            <p>{{ blurb.content }}</p>
+                        </div>
+                        {% endeditable %}
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /#advantages -->
+
+    <!-- *** ADVANTAGES END *** -->
+
+    <!-- *** HOT PRODUCT SLIDESHOW ***
+_________________________________________________________ -->
+    <div id="hot">
+        <div class="box">
+            <div class="container">
+                <div class="col-md-12">
+                    <h2>{{ page.homepage.product_heading }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="product-slider">
+                {% for product in page.homepage.featured_products.all %}
+                    <div class="item">
+                        {% if product.available %}
+                            <div class="product">
+                                {% include "shop/includes/single_product.html" %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}                
+            </div>
+            <!-- /.product-slider -->
+        </div>
+        <!-- /.container -->
+    </div>
+    <!-- /#hot -->
+
+    <!-- *** HOT END *** -->
+
+    <!-- *** GET INSPIRED ***
+_________________________________________________________ -->
+    <div class="container" data-animate="fadeInUpBig">
+        <div class="col-md-12">
+            <div class="box slideshow">
+                <h3>{{ page.homepage.second_slider_heading }}</h3>
+                <p class="lead">{{ page.homepage.second_slider_subheading}}</p>
+                <div id="get-inspired" class="owl-carousel owl-theme">
+                {% with page.children.last.gallery as last_slider %}
+                    {% if last_slider %}
+                        {% for image in last_slider.images.all %}    
+                            <div class="item">
+                                <a href="{{ image.link }}">
+                                    <img src="{{ image.file.url }}" alt="{{ image.description }}" class="img-responsive">
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- *** GET INSPIRED END *** -->
+
+    <!-- *** BLOG HOMEPAGE ***
+_________________________________________________________ -->
+
+    <div class="box text-center" data-animate="fadeInUp">
+        <div class="container">
+            <div class="col-md-12">
+                <h3 class="text-uppercase">{{ page.homepage.blog_heading }}</h3>
+                <p class="lead">{{ page.homepage.blog_subheading }} 
+                    <a href="{% url 'blog_post_list' %}">{% trans "Check our blog!" %}</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="col-md-12" data-animate="fadeInUp">
+            <div id="blog-homepage" class="row">
+                {% blog_recent_posts 2 as recent_posts %}
+                {% for post in recent_posts %}
+                    <div class="col-sm-6">
+                        <div class="post">
+                            <h4><a href="{{ post.get_absolute_url }}">{{ post }}</a></h4>
+                            <p class="author-category">By 
+                                {{ post.user.get_full_name|default:post.user.username }}
+                                in 
+                                {% for ctg in post.categories.all %}
+                                    <a href="{{ ctg.get_absolute_url }}">{{ ctg }}</a>
+                                    {% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            </p>
+                            <hr>
+                            <p class="intro">{{ post.content|truncatechars_html:250|richtext_filters|safe }}</p>
+                            <p class="read-more">
+                                <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Continue reading</a>
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- /#blog-homepage -->
+        </div>
+    </div>
+    <!-- /.container -->
+    <!-- *** BLOG HOMEPAGE END *** -->
+{% endblock content %}

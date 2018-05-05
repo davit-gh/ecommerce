@@ -1,0 +1,22 @@
+{% load mezzanine_tags rating_tags i18n widget_tweaks %}
+
+<span id="rating">
+    {% if rating_average %}
+    {% trans "Current rating" %}: {{ rating_average|floatformat }}
+    {% else %}
+    {% trans "Currently unrated" %}
+    {% endif %}
+</span>
+
+{% if not rated or request.user.is_authenticated %}
+<form id="rate-form" role="form" method="post" action="{% url "rating" %}">
+    {% nevercache %}
+    {% csrf_token %}
+    {% endnevercache %}
+    {% for field in rating_form.hidden_fields %}
+    	{{ field }}
+    {% endfor %}
+    <input id="id_value" type="text" name="value" class="rating" data-show-clear="false" data-show-caption="false" data-size="xs" data-step="1" required="required">
+    <button id="rate-btn" type="submit" class="btn btn-sm btn-primary">{% trans "Rate it!" %}</button>
+</form>
+{% endif %}

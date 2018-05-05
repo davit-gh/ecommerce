@@ -1,0 +1,85 @@
+{% extends "pages/page.html" %}
+
+{% load mezzanine_tags pages_tags shop_tags static i18n %}
+{% block body_id %}category{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/custom.js' %}"></script>
+{% endblock extra_js %}
+
+{% block content %}
+	<div class="container">
+
+        {{ block.super }}
+
+        <div class="col-md-3">
+            {% include "shop/includes/left_sidebar.html" %}
+        </div>
+
+        <div class="col-md-9">
+            <div class="box">
+                {% editable page.category.title page.category.content %}
+                    <h1>{{ page.category.title }}</h1>
+                    <p>{{ page.category.content|richtext_filters|safe }}</p>
+                {% endeditable %}
+            </div>
+
+            <div class="box info-bar">
+                <div class="row">
+                    <div class="col-sm-12 col-md-4 products-showing">
+                        {% blocktrans with part=products.object_list|length all=products.paginator.count %}    
+                            Showing <strong id="num_shown">{{ part }}</strong> of <strong>{{ all }}</strong> products.
+                        {% endblocktrans %}
+                    </div>
+                    <div class="col-sm-12 col-md-8  products-number-sort">
+                        <div class="row">
+                            <form class="form-inline">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="products-sort-by">
+                                        <strong>Sort by</strong>
+                                        {% if settings.SHOP_PRODUCT_SORT_OPTIONS.count > 0 %}
+											<form class="product-sorting" role="form">
+											    <div class="form-group">
+											        <select onchange="location.href = this[this.selectedIndex].value;" class="form-control" id="sorting-select">
+											        {% for name, option in settings.SHOP_PRODUCT_SORT_OPTIONS %}
+											        {% if "rating" not in option or settings.SHOP_USE_RATINGS %}
+											        <option{% if option == products.sort_by %} selected{% endif %}
+											            value="{{ category.get_absolute_url }}?sort={{ option }}{{ querystring }}">
+											            {{ name }}
+											        </option>
+											        {% endif %}
+											        {% endfor %}
+											        </select>
+											    </div>
+											</form>
+										{% endif %}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="products-div" class="row products">
+            	{% for product in products.object_list %}
+                    <div class="col-md-4 col-sm-6">
+                    	{% if product.available %}
+                    		<div class="product">
+                        		{% include "shop/includes/single_product.html" %}
+                        	</div>
+                    	{% endif %}
+                    </div>
+                {% endfor %}
+                <!-- /.col-md-4 -->
+            </div>
+            <!-- /.products -->
+            <div class="pages">
+                <p id="more" class="loadMore">
+                    <a href="#" class="btn btn-primary btn-lg" data-next-page="{% if products.has_next %}{{ products.next_page_number }}{% endif %}" {% if not products.has_next %}disabled{% endif %}><i class="fa fa-chevron-down"></i> {% trans "Load more" %}</a>
+                </p>
+            </div>
+        </div>
+        <!-- /.col-md-9 -->
+    </div>
+    <!-- /.container -->
+{% endblock %}
