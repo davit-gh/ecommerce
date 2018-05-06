@@ -33,7 +33,7 @@
 
     <script src="{% static 'js/respond.min.js' %}"></script>
 
-    <link rel="shortcut icon" href="{{ config.favicon.url }}">
+    <link rel="shortcut icon" href="{% if config.favicon %}{{ config.favicon.url }}{% else %}#{% endif %}">
     
     {% block extra_head %}{% endblock %}
 </head>
@@ -68,8 +68,10 @@
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand home" href="{% url 'home' %}" data-animate-hover="bounce">
-                    <img src="{{ config.logo.url }}" alt="{{ settings.SITE_TITLE }} logo" class="hidden-xs">
-                    <img src="{{ config.logo_small.url }}" alt="{{ settings.SITE_TITLE }} logo" class="visible-xs"><span class="sr-only">{{ page.title }} - {% trans "go to homepage" %}</span>
+                    <img src="{% if config.logo %}{{ config.logo.url }}{% else %}#{% endif %}" 
+                         alt="{{ settings.SITE_TITLE }} logo" class="hidden-xs">
+                    <img src="{% if config.logo_small %}{{ config.logo_small.url }}{% else %}#{% endif %}" 
+                         alt="{{ settings.SITE_TITLE }} logo" class="visible-xs"><span class="sr-only">{{ page.title }} - {% trans "go to homepage" %}</span>
                 </a>
                 <div class="navbar-buttons">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
@@ -155,7 +157,9 @@
 
                     <div class="col-md-3 col-sm-6">
                         <h4>{% trans "Where to find us" %}</h4>
-                        {{ config.footer_address|richtext_filters|safe }}
+                            {% if config.footer_address %}
+                                {{ config.footer_address|richtext_filters|safe }}
+                            {% endif %}
                         <a href="{% url 'page' 'contact' %}">{% trans "Go to contact page" %}</a>
 
                         <hr class="hidden-md hidden-lg">
@@ -165,7 +169,7 @@
 
                     <div class="col-md-3 col-sm-6">
                         <h4>{% trans "Get the news" %}</h4>
-                        <p class="text-muted">{{ config.footer_subscribe_info }}</p>
+                        <p class="text-muted">{{ config.footer_subscribe_info|default:"" }}</p>
                         <form>
                             <div class="input-group">
                                 <input type="text" class="form-control">
