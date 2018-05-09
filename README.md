@@ -81,5 +81,5 @@ Deployment is rather easy because Mezzanine is already configured with a deploym
 All the credits for the utilized packages and dependencies go to their respective owners. All I’ve done is a little remix.)
 
 # Donation
-If this code add value to you and you'd like to reciprocate here's bitcoin address for donations
+If this code adds value to you and you'd like to reciprocate here's a bitcoin address for donations:)
 19w9wSmtL2PaLwSsQktd6TzGKYnMerq6Fs
