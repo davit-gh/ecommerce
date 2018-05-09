@@ -5,21 +5,21 @@ A full-featured e-commerce website based on Django, Mezzanine and Cartridge. Use
 # Features
 Supports almost all e-ecommerce features available in Cartridge. Namely you can expect to have:
 
-# Customizable Admin Interface
-# Shopping Cart
-# Sales
-# Discount Codes
-# Product Categories
-# Product Ordering
-# Search
-# Related Products
-# Upsell products
+* Customizable Admin Interface
+* Shopping Cart
+* Sales
+* Discount Codes
+* Product Categories
+* Product Ordering
+* Search
+* Related Products
+* Upsell products
 Plus
-# A Sleek UI
-# Bitcoin Payments
-# Product Filtering
-# Recently Viewed Products
-# and more…
+* A Sleek UI
+* Bitcoin Payments
+* Product Filtering
+* Recently Viewed Products
+* and more…
 
 # Local Installation
 
