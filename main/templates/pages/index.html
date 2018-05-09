@@ -1,5 +1,5 @@
 {% extends "pages/page.html" %}
-{% load static mezzanine_tags shop_tags blog_tags i18n %}
+{% load mezzanine_tags blog_tags i18n %}
 {% block content %}
 
     <div class="container">
@@ -31,7 +31,8 @@ _________________________________________________________ -->
                     <div class="col-sm-4">
                         {% editable blurb.title blurb.content %}    
                         <div class="box same-height clickable">
-                            <div class="icon"><i class="fa fa-{{ blurb.icon_class }}"></i>
+                            <div class="icon">
+                                <i class="fa fa-{{ blurb.icon_class }}"></i>
                             </div>
                             <h3><a href="{{ blurb.link }}">{{ blurb.title }}</a></h3>
                             <p>{{ blurb.content }}</p>

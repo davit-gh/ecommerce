@@ -5,21 +5,18 @@
 .price{
 	margin-top: 0 !important;
 }
-
 #thumbs > div{
 	padding-bottom: 1em;
 }
 .active.active-branch > a{
 	color: #fff !important;
 }
-
 .error-text{
 	color: #a94442;
 }
 .hidden{
 	display: none;
 }
-
 #thankyou-div{
 	margin: 4em;
 }
@@ -28,4 +25,7 @@
 }
 textarea{
 	height: 5em !important;
+}
+.pager > li > a:hover{
+	color: #000;
 }
