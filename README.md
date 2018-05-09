@@ -15,7 +15,7 @@ Supports almost all e-ecommerce features available in Cartridge. Namely you can 
 * Related Products
 * Upsell products
 
-Plus
+Plus...
 
 * A Sleek UI
 * Bitcoin Payments
@@ -42,7 +42,7 @@ To add sliders first create Gallery pages add as many images as you like than dr
 
 
 # Bitcoin Payments 
-Website leverages blockchain.info's [Receive Payments API V2](https://blockchain.info/api/api_receive). Follow the instructions on the linked page to sign up for a wallet, request an API key and find out your XPUB value. You then need to copy over those values into your “local_settings.py” file. More delails in [this blog post](https://bitcoineria.com/blog/recently-viewed-product-filtering-and-bitcoin-payments/)
+Website leverages blockchain.info's [Receive Payments API V2](https://blockchain.info/api/api_receive) for accepting bitcoin payments. Follow the instructions on the linked page to sign up for a wallet, request an API key and find out your XPUB. You then need to copy over those values into your “local_settings.py” file. More delails in [this blog post](https://bitcoineria.com/blog/recently-viewed-product-filtering-and-bitcoin-payments/)
 
 # Deployment 
 Deployment is rather easy because Mezzanine is already configured with a deployment tool like Fabric. For specific deployment instructions visit [this blog post](https://bitcoineria.com/blog/deployment/)
@@ -77,9 +77,14 @@ Deployment is rather easy because Mezzanine is already configured with a deploym
 * If a page has in-line editable content it will dislay small "Edit" links
 * Click those links and edit the content on-the-fly
 
+# Tests
+Several tests have been created in main/tests.py and btc_payment/tests.py. To run the tests issue the commands:
+`./manage.py test main.test`
+`./manage.py test btc_payment.tests`
+
 # Credits
 All the credits for the utilized packages and dependencies go to their respective owners. All I’ve done is a little remix.)
 
 # Donation
-If this code adds value to you and you'd like to reciprocate here's a bitcoin address for donations:)
-19w9wSmtL2PaLwSsQktd6TzGKYnMerq6Fs
+If this code adds any value to you and you'd like to reciprocate, here's a bitcoin address for donations:)
+19w9wSmtL2PaLwSsQktd6TzGKYnMerq6Fs ![alt text](https://bitcoineria.com/static/media/uploads/galleries/.thumbnails/donation.png/donation-200x200.png "Donation QR code")

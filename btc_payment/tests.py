@@ -1,4 +1,3 @@
-from main.models import SiteConfiguration
 from django.test.client import RequestFactory
 from django.test import TestCase
 from .models import BtcInvoice
@@ -10,18 +9,11 @@ class BtcPaymentTests(TestCase):
 
     def setUp(self):
         """Test initialization."""
-        file = {}
-        file['url'] = 'test'
-        file['model'] = SiteConfiguration
-        SiteConfiguration.objects.create(
-            site_id=1, logo=file, logo_small=file, favicon=file
-        )
-
         self.factory = RequestFactory()
 
     def _create_handler(self, address, inv_id):
         invoice = BtcInvoice.objects.latest()
-        # Set an address that have not received funds.
+        # Set an address that has not received funds.
         invoice.address = address
         invoice.invoice_id = inv_id
         invoice.save()
@@ -33,7 +25,7 @@ class BtcPaymentTests(TestCase):
 
     # def _create_payment():
         # For the time of coding blockchain.info Receive V2 API
-        # doesn't support test payments. No automatic test for it now.
+        # doesn't support test payments. No automatic test for payments now.
 
     def test_views(self):
         """Test create_handler() function with 'unused' BTC address."""

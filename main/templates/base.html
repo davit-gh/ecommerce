@@ -253,7 +253,7 @@
         <script src="{% static 'js/front.js' %}"></script>
     {% endcompress %}
     {% block extra_js %}{% endblock %}
-    {% editable_loader %}
+    {% include "includes/footer_scripts.html" %}
 </body>
 
 </html>

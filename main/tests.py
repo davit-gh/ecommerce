@@ -1,10 +1,8 @@
 from mezzanine.core.models import CONTENT_STATUS_PUBLISHED
 from mezzanine.conf import settings
 from cartridge.shop.models import Product, ProductOption, Category
-from django.test import Client
 from django.test import TestCase
 from django.urls import reverse
-from .models import SiteConfiguration
 
 
 class MainTests(TestCase):
@@ -16,15 +14,7 @@ class MainTests(TestCase):
 
         Initialize siteconfig, category, product and options.
         """
-        # Create a SiteConfiguration object. Otherwise tests crash
-        file = {}
-        file['url'] = 'test'
-        file['model'] = SiteConfiguration
-        SiteConfiguration.objects.create(
-            site_id=1, logo=file, logo_small=file, favicon=file
-        )
-
-        # Create test products
+        # Create test product options
         for option_type in settings.SHOP_OPTION_TYPE_CHOICES:
             for i in range(10):
                 name = "test%s" % i
