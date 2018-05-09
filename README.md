@@ -1,6 +1,6 @@
 # Overview
 
-A full-featured e-commerce website based on Django, Mezzanine and Cartridge. Uses a modern HTML theme available [here](https://bootstrapious.com/p/obaju-e-commerce-template). 
+A full-featured e-commerce website based on Django, Mezzanine and Cartridge. Bitcoin payments are accepted here. Uses a modern HTML theme available [here](https://bootstrapious.com/p/obaju-e-commerce-template). 
 
 # Features
 Supports almost all e-ecommerce features available in Cartridge. Namely you can expect to have:
@@ -14,7 +14,9 @@ Supports almost all e-ecommerce features available in Cartridge. Namely you can 
 * Search
 * Related Products
 * Upsell products
+
 Plus
+
 * A Sleek UI
 * Bitcoin Payments
 * Product Filtering
@@ -72,8 +74,12 @@ Deployment is rather easy because Mezzanine is already configured with a deploym
 
 ### Use in-line editing
 * On admin UI choose "Site" before logging in
-* If a page has in-line editable content in will dislay small "Edit" links
+* If a page has in-line editable content it will dislay small "Edit" links
 * Click those links and edit the content on-the-fly
 
 # Credits
 All the credits for the utilized packages and dependencies go to their respective owners. All I’ve done is a little remix.)
+
+# Donation
+If this code add value to you and you'd like to reciprocate here's bitcoin address for donations
+19w9wSmtL2PaLwSsQktd6TzGKYnMerq6Fs
