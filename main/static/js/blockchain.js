@@ -8,7 +8,7 @@ $(function(){
     function checkBalance() {
         $.ajax({
             type: "GET",
-            url: root + 'q/getreceivedbyaddress/'+input_address, //"/main/test",
+            url: root + 'q/getreceivedbyaddress/'+input_address, 
             data : {format : 'plain'},
             success: function(response) {
 
@@ -47,7 +47,7 @@ $(function(){
                 }
 
                 $('.stage-ready').hide();
-                $('.stage-paid').trigger('show').show().html($('.stage-paid').html().replace('[[value]]', result / 100000000));
+                $('.stage-paid').removeClass('hidden').html($('.stage-paid').html().replace('[[value]]', value / 100000000));
                 form.submit();
                 ws.close();
             } catch(e) {

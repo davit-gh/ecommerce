@@ -6,5 +6,4 @@ urlpatterns = [
     url(r"^checkout$", views.checkout_steps, name="shop_checkout"),
     url(r"^product/(?P<slug>.*)$", views.product, name="shop_product"),
     url(r"^recently_viewed$", views.recent_products, name='recently_viewed')
-#   url("^test$", views.test)
 ]

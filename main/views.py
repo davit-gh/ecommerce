@@ -88,6 +88,3 @@ def product(request, slug):
     products = Product.objects.published().filter(slug__in=slugs)
     extra = {'recent_products': products}
     return views.product(new_request, slug, extra_context=extra)
-
-# def test(request):
-#     return django.http.HttpResponse("500005")

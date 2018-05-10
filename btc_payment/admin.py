@@ -43,7 +43,7 @@ class BtcInvoiceAdmin(admin.ModelAdmin):
 class BtcInvoicePaymentsAdmin(admin.ModelAdmin):
     """Add 2 new columns to list_display."""
 
-    list_display = ('value', 'rel_order', 'rel_btc_invoice')
+    list_display = ('invoice_id', 'value', 'rel_order', 'rel_btc_invoice')
 
     def rel_order(self, payment):
         """Link to related Order instabce."""

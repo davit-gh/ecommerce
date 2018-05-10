@@ -22,9 +22,9 @@ def create_handler(request, order_total, btc_total):
     Create a new bitcoin address if the latest created one has received funds.
 
     Otherwise use the latest address. The aim is to avoid 'address gap' issue.
-    invoice_id should be something unique for the session.
+    invoice_id should be something unique for the transaction.
     """
-    invoice_id = request.COOKIES['sessionid'][:12]
+    invoice_id = str(request.cart.id)
     recv = BtcInvoice.objects.latest()
     address = recv.address
     received = get_address(address).total_received

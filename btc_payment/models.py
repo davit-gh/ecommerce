@@ -16,7 +16,7 @@ class BtcInvoice(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return "{} - {}".format(self.invoice_id, self.added_time)
+        return self.invoice_id
 
     class Meta:
         get_latest_by = "added_time"

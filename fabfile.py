@@ -70,6 +70,11 @@ env.num_workers = conf.get("NUM_WORKERS",
 
 env.secret_key = conf.get("SECRET_KEY", "")
 env.nevercache_key = conf.get("NEVERCACHE_KEY", "")
+env.xpub = conf.get("XPUB", "")
+env.api_key = conf.get("API_KEY", "")
+env.email_host = conf.get("EMAIL_HOST", "")
+env.email_host_user = conf.get("EMAIL_HOST_USER", "")
+env.email_host_password = conf.get("EMAIL_HOST_PASSWORD", "")
 
 if not env.secret_key:
     print("Aborting, no SECRET_KEY setting defined.")

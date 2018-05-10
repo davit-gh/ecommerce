@@ -35,3 +35,24 @@ CACHES = {
 }
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+#######################
+# BLOCKCHAIN SETTINGS #
+#######################
+
+BLOCKCHAIN_ROOT = "https://www.blockchain.info"
+XPUB = "%(xpub)s"
+API_KEY = "%(api_key)s"
+
+######################
+# ZOHO MAIL SETTINGS #
+######################
+
+EMAIL_PORT = 587
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_USE_TLS = True
+EMAIL_HOST = "%(email_host)s"
+EMAIL_HOST_USER = "%(email_host_user)s"
+EMAIL_HOST_PASSWORD = "%(email_host_password)s"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SHOP_ORDER_FROM_EMAIL = DEFAULT_FROM_EMAIL
