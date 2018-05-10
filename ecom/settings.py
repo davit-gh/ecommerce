@@ -162,12 +162,6 @@ EXTRA_MODEL_FIELDS = (
     ),
 )
 
-MIGRATION_MODULES = {
-    "galleries": "main.migrations.gallery_migrations",
-    "shop": "main.migrations.shop_migrations",
-    "blog": "main.migrations.blog_migrations"
-}
-
 # Setting to turn on featured images for blog posts. Defaults to False.
 #
 BLOG_USE_FEATURED_IMAGE = True
@@ -340,7 +334,6 @@ INSTALLED_APPS = (
     "mezzanine.forms",
     "mezzanine.galleries",
     "mezzanine.twitter",
-    "template_debug",
     "widget_tweaks",
     "btc_payment",
     # "mezzanine.accounts",
@@ -452,6 +445,14 @@ RECENT_MAXLEN = 6
 # If you want to enable Disqus comments for blog post set your
 # Disqus shortname here. Otherwise Mezzanine comments are used.
 # COMMENTS_DISQUS_SHORTNAME = "your disqus shortname here"
+
+# Set new path for the migrations of third-party apps
+# to avoid changing their file structure
+MIGRATION_MODULES = {
+    "galleries": "main.migrations.gallery_migrations",
+    "shop": "main.migrations.shop_migrations",
+    "blog": "main.migrations.blog_migrations"
+}
 
 # Country list. Used in first checkout step
 # for popuating supported countries for shipping.

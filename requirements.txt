@@ -10,8 +10,6 @@ chardet==3.0.4
 cryptography==2.2.2
 Django==1.10.8
 django-contrib-comments==1.8.0
-django-debug-toolbar==1.9.1
-django-template-debug==0.3.5
 django-widget-tweaks==1.4.2
 enum34==1.1.6
 Fabric==1.13.2
