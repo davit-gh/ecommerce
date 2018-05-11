@@ -88,3 +88,9 @@ All the credits for the utilized packages and dependencies go to their respectiv
 # Donation
 If this code adds any value to you and you'd like to reciprocate, here's a bitcoin address for donations:)
 19w9wSmtL2PaLwSsQktd6TzGKYnMerq6Fs ![alt text](https://bitcoineria.com/static/media/uploads/galleries/.thumbnails/donation.png/donation-200x200.png "Donation QR code")
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="9PWESEARPH2QU">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
