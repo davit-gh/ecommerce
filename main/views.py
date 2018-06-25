@@ -1,7 +1,7 @@
 from collections import deque
 from django.utils.translation import ugettext as _
 from django.shortcuts import render
-from cartridge.shop.models import Product
+from cartridge.shop.models import Product, Category
 from cartridge.shop import views
 from mezzanine.conf import settings
 from .forms import CustomOrderForm
@@ -40,9 +40,13 @@ def filter_by_options(request):
     """
     if request.method == 'POST':
         opt_ids = request.POST.getlist('checkboxes')
-        products = Product.objects.published().filter(
-            categories__options__in=opt_ids
-        ).distinct()
+        categories = Category.objects.published().filter(options__in=opt_ids)
+        products = []
+        for category in categories:
+            products += category.products.filter(category.filters()).distinct()
+        # products = Product.objects.published().filter(
+        #     categories__options__in=opt_ids
+        # ).distinct()
         header = _("Filtered Products")
         return _render_products(request, products, header)
 

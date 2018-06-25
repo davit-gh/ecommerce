@@ -29,7 +29,7 @@ class SiteConfiguration(SiteRelated):
     )
     footer_address = models.TextField(
         default=_("Our address"),
-        help_text=_("Company address displayed on footer."))
+        help_text=_("Company address displayed in footer."))
     footer_subscribe_info = models.CharField(
         max_length=200,
         default=_("Pellentesque habitant morbi tristique senectus et netus \

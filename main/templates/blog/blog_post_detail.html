@@ -53,7 +53,7 @@
                     </p>
                 {% endeditable %}
                 {% if settings.BLOG_USE_FEATURED_IMAGE and blog_post.featured_image %}
-                    <p><img class="img-responsive" src="{{ MEDIA_URL }}{{ blog_post.featured_image }}" alt="blog_post.featured_image.filename_root"></p>
+                    <p><img class="img-responsive" src="{{ MEDIA_URL }}{{ blog_post.featured_image }}" alt="{{ blog_post.featured_image.filename_root }}"></p>
                 {% endif %}
                 <div id="post-content">
                     {% editable blog_post.content %}

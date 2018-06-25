@@ -65,12 +65,12 @@
                         <a href="{{ blog_post.get_absolute_url }}"><i class="fa fa-calendar-o"></i>
                             {% blocktrans with sometime=blog_post.publish_date|timesince %}{{ sometime }} ago{% endblocktrans %}
                         </a>
-                        <a href="{{ blog_post.get_absolute_url }}"><i class="fa fa-comment-o"></i> 8 Comments</a>
+                        <a href="{{ blog_post.get_absolute_url }}"><i class="fa fa-comment-o"></i></a>
                     </p>
                     {% if settings.BLOG_USE_FEATURED_IMAGE and blog_post.featured_image %}
                         <div class="image">
                             <a href="{{ blog_post.get_absolute_url }}">
-                                <img src="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 800 450 %}" class="img-responsive" alt="blog_post.featured_image.filename_root">
+                                <img src="{{ MEDIA_URL }}{% thumbnail blog_post.featured_image 800 450 %}" class="img-responsive" alt="{{ blog_post.featured_image.filename_root }}">
                             </a>
                         </div>
                     {% endif %}
