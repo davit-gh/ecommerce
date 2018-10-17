@@ -446,7 +446,7 @@ def install():
     Installs the base system and Python requirements for the entire server.
     """
     # Install system requirements
-    sudo("apt-get update -y -q")
+    sudo("apt-get -o Acquire::Check-Valid-Until=false update")
     apt("nginx libjpeg-dev python-dev python-setuptools git-core "
         "postgresql libpq-dev memcached supervisor python-pip")
     run("mkdir -p /home/%s/logs" % env.user)

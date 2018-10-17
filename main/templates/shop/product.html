@@ -15,7 +15,7 @@
 {% endmetablock %}{% endblock %}
 
 {% block breadcrumb_menu %}
-    {% include "pages/menus/product_breadcrumb.html" with ctgs=product.categories.all %}
+    {% include "pages/menus/product_breadcrumb.html" with ctgs=product.categories.published %}
 {% endblock %}
 
 {% block extra_js %}

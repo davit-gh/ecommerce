@@ -55,7 +55,7 @@ SHOP_CURRENCY_LOCALE = "en_US.utf8"
 # is called on submit of the payment checkout step. This is where
 # integration with a payment gateway should be implemented.
 SHOP_HANDLER_PAYMENT = "main.checkout.payment_handler"
-
+#SHOP_HANDLER_PAYMENT = "cartridge.shop.payment.paypal.process"
 # Sequence of value/name pairs for order statuses.
 # SHOP_ORDER_STATUS_CHOICES = (
 #     (1, "Unprocessed"),
@@ -444,7 +444,7 @@ RECENT_MAXLEN = 6
 
 # If you want to enable Disqus comments for blog post set your
 # Disqus shortname here. Otherwise Mezzanine comments are used.
-# COMMENTS_DISQUS_SHORTNAME = "your disqus shortname here"
+COMMENTS_DISQUS_SHORTNAME = "smart-blog-1"
 
 # Set new path for the migrations of third-party apps
 # to avoid changing their file structure

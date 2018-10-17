@@ -3,7 +3,7 @@
     {% trans "All Categories" %}
 </li>
 <li>
-    {% for ctg in ctgs %}
+    {% for ctg in ctgs reversed %}
         <a href="{{ ctg.get_absolute_url }}">{{ ctg.title|title }}</a>
         {% if not forloop.last %} | {% endif %}
     {% endfor %}

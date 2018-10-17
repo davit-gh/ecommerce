@@ -18,36 +18,38 @@
     </div>
 
     <div class="col-md-9">
-        {% editable page.faqpage.title page.faqpage.subheader page.faqpage.content %}
-            <div class="box" id="contact">
-                <h1>{{ page.faqpage.title }}</h1>
-                <p class="lead">{{ page.faqpage.subheader }}</p>
-                <p>{{ page.faqpage.content }}</p>
-                <hr>
-                <div class="panel-group" id="accordion">
-                	{% for entry in page.faqpage.faqs.all %}
-        	            {% editable entry.title entry.content %}    
-                            <div class="panel panel-primary">
-        	                    <div class="panel-heading">
-        	                        <h4 class="panel-title">
-        							    <a data-toggle="collapse" data-parent="#accordion" href="#{{ entry.id }}">
-        									{{ entry.title }}
-        							    </a>
-        							</h4>
-        	                    </div>
-        	                    <div id="{{ entry.id }}" class="panel-collapse collapse">
-        	                        <div class="panel-body">
-        	                            {{ entry.content|safe }}
-        	                        </div>
-        	                    </div>
-        	                </div>
-                        {% endeditable %}
-    	                <!-- /.panel -->
-    	            {% endfor %}
+        {% block md9 %}
+            {% editable page.faqpage.title page.faqpage.subheader page.faqpage.content %}
+                <div class="box" id="contact">
+                    <h1>{{ page.faqpage.title }}</h1>
+                    <p class="lead">{{ page.faqpage.subheader }}</p>
+                    <p>{{ page.faqpage.content }}</p>
+                    <hr>
+                    <div class="panel-group" id="accordion">
+                    	{% for entry in page.faqpage.faqs.all %}
+            	            {% editable entry.title entry.content %}    
+                                <div class="panel panel-primary">
+            	                    <div class="panel-heading">
+            	                        <h4 class="panel-title">
+            							    <a data-toggle="collapse" data-parent="#accordion" href="#{{ entry.id }}">
+            									{{ entry.title }}
+            							    </a>
+            							</h4>
+            	                    </div>
+            	                    <div id="{{ entry.id }}" class="panel-collapse collapse">
+            	                        <div class="panel-body">
+            	                            {{ entry.content|safe }}
+            	                        </div>
+            	                    </div>
+            	                </div>
+                            {% endeditable %}
+        	                <!-- /.panel -->
+        	            {% endfor %}
+                    </div>
+                    <!-- /.panel-group -->
                 </div>
-                <!-- /.panel-group -->
-            </div>
-        {% endeditable %}
+            {% endeditable %}
+        {% endblock %}
     </div>
     <!-- /.col-md-9 -->
 </div>

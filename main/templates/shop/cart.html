@@ -6,7 +6,15 @@
 {% block body_id %}cart{% endblock %}
 
 {% block extra_js %}
-	<script src="{% static 'js/updateCart.js' %}"></script>
+	{% if cart_formset.forms %}
+		<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+	    <script>
+	    	var payment = {{ paypal_data|safe }};
+	    	var paypal_client_id = '{{ settings.PAYPAL_CLIENT_ID }}';
+	    </script>
+		<script src="{% static 'js/shop/paypal_checkout.js' %}"></script>
+		<script src="{% static 'js/shop/updateCart.js' %}"></script>
+	{% endif %}
 {% endblock %}
 
 {% block breadcrumb_menu %}
@@ -62,7 +70,7 @@
 		                                            <img src="{{ MEDIA_URL }}{{ item.image }}" alt="{{ item.description }}">
 		                                        </a>
 		                                    </td>
-		                                    <td><a href="{{ MEDIA_URL }}{{ item.image }}">{{ item.description }}</a>
+		                                    <td><a href="{{ item.get_absolute_url }}">{{ item.description }}</a>
 		                                    </td>
 		                                    <td class="count-input">
 		                                        {% render_field form.quantity class="form-control" oninput="updateCart();" %}
@@ -71,7 +79,7 @@
 		                                    <td>{{ item.unit_price|currency }}</td>
 		                                    <td>{{ item.total_price|currency }}</td>
 		                                    <td>{% render_field form.DELETE style="display: none" %}
-		                                    	<a href="#" onclick="removeItem(this);"><i class="fa fa-trash-o"></i></a>
+		                                    	<a href="#" onclick="removeItem(this, event);"><i class="fa fa-trash-o"></i></a>
 		                                    </td>
 		                                </tr>
 		                            {% endwith %}
@@ -88,18 +96,31 @@
                     <!-- /.table-responsive -->
                     
                     <div class="box-footer">
-                        <div class="pull-left">
-                            <a href="{% url 'home' %}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Continue shopping</a>
-                        </div>
-                        <div class="pull-right">
-                        <a href="{% url "shop_checkout" %}" class="btn btn-primary">
-                        	{% if request.session.order.step %}
-                        		<i class="fa fa-chevron-left"></i>{% trans "Return to Checkout" %}
-                        	{% else %}
-                        		{% trans "Proceed to Checkout" %}<i class="fa fa-chevron-right"></i>
-                        	{% endif %}
-                        </a>
-                        </div>
+                    	<div class="row">
+	                        <div class="col-md-4">
+	                            <a href="{% url 'home' %}" class="btn btn-default"><i class="fa fa-chevron-left"></i> Continue shopping</a>
+	                        </div>
+	                        <div class="col-md-4">
+	                        	<div id="paypal-button-container"></div>
+	                        </div>
+	                        <div class="col-md-4">
+		                        <a href="{% url "shop_checkout" %}" class="btn btn-primary">
+		                        	{% if request.session.order.step %}
+		                        		{% trans "Return to Checkout With BTC" %}
+		                        		<span class="fa-stack fa-lg">
+		                        			<i class="fa fa-circle fa-stack-2x"></i>
+		                        			<i class="fa fa-btc fa-stack-1x fa-rotate-25"></i>
+		                        		</span>
+		                        	{% else %}
+		                        		{% trans "Checkout With BTC" %}
+		                        		<span class="fa-stack fa-lg">
+		                        			<i class="fa fa-circle fa-stack-2x"></i>
+		                        			<i class="fa fa-btc fa-stack-1x fa-rotate-25"></i>
+		                        		</span>
+		                        	{% endif %}
+		                        </a>
+	                        </div>
+	                    </div>
                     </div>
                 </form>
               
@@ -160,7 +181,11 @@
         </div>
         <!-- /.col-md-3 -->
 	{% else %}
-		<h3 class="text-center">{% trans "Your Cart is empty." %}</h3>
+		<div class="text-center">	
+			<h3>{% trans "Your Cart is empty." %}</h3>
+			<a class="btn btn-primary" href="{% url 'home' %}">Go To Homepage</a>
+		</div>
+		<hr>
 	{% endif %}
     </div>
     <!-- /.container -->

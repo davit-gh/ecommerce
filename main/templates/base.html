@@ -44,7 +44,7 @@
     <div id="top">
         <div class="container">
             <div class="col-md-6 offer" data-animate="fadeInDown">
-                <a href="#" class="btn btn-success btn-sm" data-animate-hover="shake">{% trans "Offer of the day" %}</a>  <a href="#">{% trans "Get flat 35% off on orders over $50!" %}</a>
+                <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModal">{% trans "Offer of the day" %}</a>  <a href="#">{% trans "Get flat 35% off on orders over $50!" %}</a>
             </div>
             <div class="col-md-6" data-animate="fadeInDown">
                 <ul class="menu">
@@ -160,8 +160,6 @@
                             {% if config.footer_address %}
                                 {{ config.footer_address|richtext_filters|safe }}
                             {% endif %}
-                        <a href="{% url 'page' 'contact' %}">{% trans "Go to contact page" %}</a>
-
                         <hr class="hidden-md hidden-lg">
                     </div>
                     <!-- /.col-md-3 -->
@@ -251,9 +249,23 @@
         <script src="{% static 'js/vendor/bootstrap-hover-dropdown.js' %}"></script>
         <script src="{% static 'js/vendor/owl.carousel.min.js' %}"></script>
         <script src="{% static 'js/front.js' %}"></script>
+        {% block extra_js %}{% endblock %}
     {% endcompress %}
-    {% block extra_js %}{% endblock %}
     {% include "includes/footer_scripts.html" %}
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">  
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Offer of the Day</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>Get flat 35% off on orders over $50!</h4>
+                    <h5>Use the code: "<strong>35%off</strong>"</h5>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

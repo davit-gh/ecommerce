@@ -4,7 +4,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.db import models
 from mezzanine.pages.models import Page
 from mezzanine.core.models import Orderable
-from mezzanine.core.fields import FileField
+from mezzanine.core.fields import FileField, RichTextField
 from mezzanine.core.models import SiteRelated
 from cartridge.shop.models import Product
 
@@ -27,7 +27,7 @@ class SiteConfiguration(SiteRelated):
         _("Favicon"), upload_to="site", blank=True,
         help_text=_("An image that appears in the browser tab")
     )
-    footer_address = models.TextField(
+    footer_address = RichTextField(
         default=_("Our address"),
         help_text=_("Company address displayed in footer."))
     footer_subscribe_info = models.CharField(

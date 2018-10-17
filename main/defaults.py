@@ -46,6 +46,14 @@ register_setting(
     editable=True,
     default='mailto:',
 )
+register_setting(
+    name="PAYPAL_CLIENT_ID",
+    label=_("Paypal Client ID"),
+    description=_(
+        "For Paypal integration"),
+    editable=True,
+    default='AWlw7znpDY9U6idgZ3PKSYooa5awAkihvnehLw9PA-DeUDVJo6LSp9WjWIAjuZqQd-R65T3LscMY0H_F',
+)
 
 # appending new defined setting to TEMPLATE_ACCESSIBLE_SETTINGS
 register_setting(
@@ -57,7 +65,8 @@ register_setting(
         "SOCIAL_LINK_TWITTER",
         "SOCIAL_LINK_GOOGLE_PLUS",
         "SOCIAL_LINK_INSTAGRAM",
-        "EMAIL_LINK"
+        "EMAIL_LINK",
+        "PAYPAL_CLIENT_ID"
     ),
     append=True,
 )
