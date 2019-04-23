@@ -66,8 +66,8 @@ def paypal_success(request):
     if request.session.get('cart'):
         for item in request.cart.items.all():
             items.append({
-                'image': item.image, 'get_absolute_url': item.get_absolute_url(),
-                'title': item.description
+                'image': item.image, 'title': item.description,
+                'get_absolute_url': item.get_absolute_url()
             })
         discount_code = request.session.get('discount_code')
         clear_session(request, "order", *session_fields)
