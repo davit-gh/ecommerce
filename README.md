@@ -29,7 +29,7 @@ Plus...
 2. Install `virtualenv` if haven’t installed it
 3. Create a new environment - `mkvirtualenv ecommerce`
 4. `cd` to cloned repo
-5. `pip install -r requirements.py` - installs the required modules
+5. `pip install -r requirements.txt` - installs the required modules
 6. `python manage.py migrate` - applies the migrations
 7. `python manage.py createsuperuser` - create an admin user
 8. Navigate to http://localhost:8000/admin and enter the credentials from the previous step
