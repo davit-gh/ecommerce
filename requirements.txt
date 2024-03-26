@@ -3,7 +3,7 @@ bcrypt==3.1.4
 beautifulsoup4==4.6.0
 bleach==2.1.3
 blockchain==1.3.3
--e git://github.com/stephenmcd/cartridge.git@51a2d7fa0f4598562073f82d7701f291716bb1f5#egg=Cartridge
+-e https://github.com/stephenmcd/cartridge.git@51a2d7fa0f4598562073f82d7701f291716bb1f5#egg=Cartridge
 certifi==2018.1.18
 cffi==1.11.5
 chardet==3.0.4
